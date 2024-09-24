@@ -51,6 +51,15 @@ class Message(object):
   # for this message type.
   DESCRIPTOR = None
 
+  def __setattr__(self, name, value):
+    try:    
+      super(Message, self).__setattr__(name, value)
+    except Exception as err:
+      if value is None:
+        self.ClearField(name)
+      else:
+        raise Exception(err)    
+          
   def __deepcopy__(self, memo=None):
     clone = type(self)()
     clone.MergeFrom(self)
